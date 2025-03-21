@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="panel-container">
+        <div class="panel">
+          <h1>HTML Generator</h1>
+          <div class="bg-color-container">
+            <h2>Bakgrunnsfarge</h2>
+            <div class="color-inputs">
+              <input
+                type="text"
+                name="colorCode"
+                id="bgColorCodeInput"
+                placeholder="HEX color code"
+                value="#ffffff"
+              />
+              <input
+                type="color"
+                name="colorPicker"
+                class="color-picker-input"
+                id="bgColorPicker"
+                value="#ffffff"
+              />
+            </div>
+          </div>
+    
+          <div class="element-types">
+            <h2>Tekst</h2>
+            <div class="element-selector-wrapper">
+              <label for="elementSelector">Velg element type: </label>
+              <select name="elementSelector" id="elementSelector">
+                <option value="" hidden>Velg element</option>
+                <option value="h1">Overskrift 1</option>
+                <option value="h2">Overskrift 2</option>
+                <option value="p">Avsnitt</option>
+                <option value="ul">Liste</option>
+                <option value="br">Linjeskift</option>
+              </select>
+            </div>
+    
+            <div class="text-color-inputs">
+              <label for="colorCode">Tekst farge: </label>
+              <div class="color-inputs">
+                <input
+                  type="text"
+                  name="colorCode"
+                  id="textColorCodeInput"
+                  placeholder="HEX color code"
+                  value="#000000"
+                />
+                <input
+                  type="color"
+                  name="colorPicker"
+                  class="color-picker-input"
+                  id="textColorPicker"
+                  value="#000000"
+                />
+              </div>
+            </div>
+    
+            <div class="content">
+              <label for="content">Innhold: </label>
+              <textarea
+                name="content"
+                id="textBox"
+                placeholder="Skriv innhold her"
+              ></textarea>
+            </div>
+            <button id="addElBtn">Legg til</button>
+          </div>
+        </div>
+      </div>
+  
+      <div id="canvas"></div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
