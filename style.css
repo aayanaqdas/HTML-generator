@@ -30,18 +30,6 @@ body {
   min-width: 300px;
 }
 
-#canvas {
-  width: 100%;
-  min-height: 300px;
-  padding: 20px;
-  margin: 10px;
-  border-radius: 10px;
-  background-color: #ffffff;
-  color: #000000;
-  word-break: break-all;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
 .bg-color-container {
   margin-top: 20px;
   margin-bottom: 10px;
@@ -107,3 +95,36 @@ button,
 ul {
   padding-left: 20px;
 }
+
+#canvas {
+  width: 100%;
+  min-height: 300px;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #000000;
+  word-break: break-all;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.element {
+  padding: 2px;
+  border: 1px solid transparent;
+  transition: border 0.3s ease;
+  outline: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.element:hover {
+  border: 1px dashed grey;
+}
+.selected {
+  outline: 2px dashed rgb(72, 72, 255);
+}
+
+.fade-out {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
