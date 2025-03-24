@@ -1,3 +1,4 @@
+// DOM Elements
 const canvas = document.getElementById("canvas");
 const bgColorInput = document.getElementById("bgColorCodeInput");
 const bgColorPicker = document.getElementById("bgColorPicker");
@@ -7,15 +8,18 @@ const textColorpicker = document.getElementById("textColorPicker");
 const textBox = document.getElementById("textBox");
 const addBtn = document.getElementById("addElBtn");
 
-let bgColor;
-let textColor;
+// Variables
+let bgColor = "#ffffff";
+let textColor = "#000000";
 let selectedElement = null;
 
+// Initialization
 document.addEventListener("DOMContentLoaded", () => {
   canvas.style.backgroundColor = bgColorInput.value;
   canvas.style.color = textColorInput.value;
 });
 
+// Background Color Handlers
 bgColorPicker.addEventListener("change", () => {
   bgColor = bgColorPicker.value;
   bgColorInput.value = bgColor;
@@ -28,6 +32,7 @@ bgColorInput.addEventListener("input", () => {
   canvas.style.backgroundColor = bgColor;
 });
 
+// Text Color Handlers
 textColorpicker.addEventListener("change", () => {
   textColor = textColorpicker.value;
   textColorInput.value = textColor;
@@ -44,8 +49,22 @@ textColorInput.addEventListener("input", () => {
   }
 });
 
+// Utility Functions
+function rgbToHex(rgb) {
+  const result = rgb.match(/\d+/g);
+  return result
+    ? `#${(
+        (1 << 24) +
+        (parseInt(result[0]) << 16) +
+        (parseInt(result[1]) << 8) +
+        parseInt(result[2])
+      )
+        .toString(16)
+        .slice(1)}`
+    : rgb;
+}
 
-
+// Element Creation
 function createElement() {
   const element = document.createElement(elementTypeSelector.value);
   const elementContent = textBox.value;
@@ -54,28 +73,23 @@ function createElement() {
   element.classList.add("element");
   element.contentEditable = true;
 
-  // If user wants to make a list split on comma
+  // Handle List Creation
   if (elementTypeSelector.value === "ul") {
     const items = elementContent.split(",");
     element.innerHTML = items.map((item) => `<li>${item.trim()}</li>`).join("");
   }
 
-  // Add click event to select the element
+  // Add Click Event for Selection
   element.addEventListener("click", (e) => {
-    e.stopPropagation(); // Prevent deselecting when clicking on the element
+    e.stopPropagation();
     selectElement(element);
   });
 
   canvas.appendChild(element);
+  textBox.value = "";
 }
 
-// Add event listener to the element type selector to change the type of the selected element
-elementTypeSelector.addEventListener("change", () => {
-  if (selectedElement) {
-    changeElementType(elementTypeSelector.value);
-  }
-});
-
+// Element Selection
 function selectElement(element) {
   if (selectedElement) {
     selectedElement.classList.remove("selected");
@@ -83,9 +97,14 @@ function selectElement(element) {
   selectedElement = element;
   selectedElement.classList.add("selected");
 
+  textColor = rgbToHex(selectedElement.style.color);
+  textColorInput.value = textColor;
+  textColorpicker.value = textColor;
+
   selectedElement.addEventListener("dblclick", removeElement);
 }
 
+// Change Element Type
 function changeElementType(newType) {
   if (!selectedElement || selectedElement.tagName.toLowerCase() === newType) {
     return;
@@ -110,11 +129,16 @@ function changeElementType(newType) {
   canvas.replaceChild(newElement, selectedElement);
   selectElement(newElement);
 }
-
-function removeElement(e) {
-  e.stopPropagation(); // Prevent triggering other click events
+elementTypeSelector.addEventListener("change", () => {
   if (selectedElement) {
-    // Add a fade-out effect before removing
+    changeElementType(elementTypeSelector.value);
+  }
+});
+
+// Remove Element
+function removeElement(e) {
+  e.stopPropagation();
+  if (selectedElement) {
     selectedElement.classList.add("fade-out");
     setTimeout(() => {
       selectedElement.remove();
@@ -123,7 +147,7 @@ function removeElement(e) {
   }
 }
 
-// Deselect the element when clicking outside
+// Deselect Element on Outside Click
 document.addEventListener("click", (e) => {
   if (
     selectedElement &&
@@ -136,15 +160,11 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Prevent deselection when focusing on the textColor inputs
-textColorInput.addEventListener("focus", (e) => {
-  e.stopPropagation();
-});
+// Prevent Deselect on Input Focus
+textColorInput.addEventListener("focus", (e) => e.stopPropagation());
+textColorpicker.addEventListener("focus", (e) => e.stopPropagation());
 
-textColorpicker.addEventListener("focus", (e) => {
-  e.stopPropagation();
-});
-
+// Add Element Button
 addBtn.addEventListener("click", () => {
   if (
     (elementTypeSelector.value !== "br" && textBox.value === "") ||
