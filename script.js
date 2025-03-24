@@ -13,11 +13,24 @@ let bgColor = "#ffffff";
 let textColor = "#000000";
 let selectedElement = null;
 
-// Initialization
+const tooltip = document.getElementById("deleteTooltip");
+
+//set default colors
 document.addEventListener("DOMContentLoaded", () => {
-  canvas.style.backgroundColor = bgColorInput.value;
-  canvas.style.color = textColorInput.value;
+  canvas.style.backgroundColor = bgColor;
+  canvas.style.color = textColor;
 });
+
+function showTooltip(element) {
+  const rect = element.getBoundingClientRect();
+  tooltip.style.left = `${rect.left + window.scrollX + rect.width / 2}px`;
+  tooltip.style.top = `${rect.top + window.scrollY - 30}px`;
+  tooltip.style.display = "block";
+}
+
+function hideTooltip() {
+  tooltip.style.display = "none";
+}
 
 // Background Color Handlers
 bgColorPicker.addEventListener("change", () => {
@@ -49,7 +62,7 @@ textColorInput.addEventListener("input", () => {
   }
 });
 
-// Utility Functions
+// Converts rgb to hex
 function rgbToHex(rgb) {
   const result = rgb.match(/\d+/g);
   return result
@@ -101,6 +114,8 @@ function selectElement(element) {
   textColorInput.value = textColor;
   textColorpicker.value = textColor;
 
+  showTooltip(selectedElement);
+
   selectedElement.addEventListener("dblclick", removeElement);
 }
 
@@ -110,12 +125,19 @@ function changeElementType(newType) {
     return;
   }
 
-  // Create a new element with the desired type
+  // Create a new element
   const newElement = document.createElement(newType);
   newElement.textContent = selectedElement.textContent;
   newElement.style.cssText = selectedElement.style.cssText; // Copy styles
   newElement.className = selectedElement.className; // Copy classes
   newElement.contentEditable = true;
+
+  if (newType === "ul") {
+    const items = newElement.textContent.split(",");
+    newElement.innerHTML = items
+      .map((item) => `<li>${item.trim()}</li>`)
+      .join("");
+  }
 
   // Add click event to select the new element
   newElement.addEventListener("click", (e) => {
@@ -143,6 +165,7 @@ function removeElement(e) {
     setTimeout(() => {
       selectedElement.remove();
       selectedElement = null;
+      hideTooltip();
     }, 300);
   }
 }
@@ -157,6 +180,7 @@ document.addEventListener("click", (e) => {
   ) {
     selectedElement.classList.remove("selected");
     selectedElement = null;
+    hideTooltip();
   }
 });
 
